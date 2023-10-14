@@ -1,38 +1,166 @@
-.App {
-  text-align: center;
+* {
+  border: none;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: none; /* for iOS Safari */
+  text-size-adjust: none; /* for other mobile browsers */
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+  html {
+      scroll-behavior: smooth;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+menu:not(article menu),
+ol:not(article ol),
+ul:not(article ul) {
+  list-style: none;
+}
+
+menu,
+ol,
+ul {
+  padding-left: 0;
+}
+
+article ol,
+article ul {
+  list-style-position: inside;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  /* Places underlines below the descenders */
+  text-underline-position: under;
+
+  /* Sets the thickness as a percentage of the font size */
+  text-decoration-thickness: 8px;
+}
+
+label,
+button,
+select,
+summary,
+[type=radio],
+[type=submit],
+[type=checkbox] {
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transition: 200ms ease-in-out;
+  border: 1px solid #666666;
+  border-radius: 10px;
+  z-index: 10;
+  background-color: #f5f5f5;
+  width: 500px;
+  max-width: 80%;
+}
+
+.modal-header {
+  padding: 10px 15px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border-bottom: 1px solid #666666;
 }
 
-.App-link {
-  color: #61dafb;
+.modal-header .title {
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.modal-header .close-button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+#overlay {
+  position: fixed;
+  transition: 200ms ease-in-out;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .5);
+}
+
+.add-transaction-form-container {
+  padding: 20px;
+}
+
+.add-transaction-form-container label,
+.add-transaction-form-container select,
+.add-transaction-form-container input {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.add-transaction-form-container input[type="text"],
+.add-transaction-form-container input[type="number"],
+.add-transaction-form-container select,
+.add-transaction-form-container input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px; /* Make it slightly rounded */
+  font-family: 'Arial', sans-serif; /* Change the font for input fields */
+}
+
+.add-transaction-form-container label {
+  font-family: 'Helvetica', Arial, sans-serif; /* Change the font for labels */
+}
+
+.add-transaction-form-container input[type="submit"] {
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin: 20px auto auto;
 }
