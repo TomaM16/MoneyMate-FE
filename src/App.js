@@ -1,42 +1,25 @@
 import './App.css';
-import api from './api/axiosConfig';
-import { useState, useEffect } from 'react';
-import Layout from './components/Layout';
-import {Routes, Route} from 'react-router-dom';
-import Home from './components/home/Home';
+import Home from './pages/home/Home';
+import Transactions from './pages/transactions/Transactions';
+import Reports from './pages/reports/Reports';
+import Navigation from './components/navigation/Navigation';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 
 function App() {
-
-  const [transactions, setTransactions] = useState();
-
-  const getTransactions = async () => {
-
-    try {
-      const response = await api.get('/api/v1/transactions');
-
-      console.log(response.data);
-      setTransactions(response.data);
-
-    } catch (error) {
-      console.log(error);
-    }
-
-  }
-
-  useEffect(() => {
-    getTransactions();
-  }, [])
-
   return (
-    <div className="App">
-      
-      <Routes>
-        <Route path="/" element={<Layout transactions={transactions} />}>
-          <Route path="/" element={<Home transactions={transactions} />} />
-        </Route>
-      </Routes>
+    <Router>
+      <main className="content">
+        <Navigation />
 
-    </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/reports" element={<Reports />} />
+        </Routes>
+      </main>
+    </Router>
   );
 }
 
