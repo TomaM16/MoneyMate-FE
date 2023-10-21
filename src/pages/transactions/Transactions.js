@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import TransactionSearchBar from '../../components/transaction/TransactionSearchBar';
 import api from '../../api/axiosConfig';
 import "./Transactions.css";
 
@@ -9,6 +10,24 @@ function formatDate(dateString) {
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const [newTransaction, setNewTransaction] = useState({
+    date: new Date().toISOString().slice(0, 10),
+    description: '',
+    amount: '',
+    categoryId: '',
+  });
+  const [searchQuery, setSearchQuery] = useState('');
+  const filteredTransactions = transactions.filter((transaction) =>
+    transaction.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    getTransactions();
+    getCategories();
+  }, [])
 
   const getTransactions = async () => {
     try {
@@ -20,8 +39,6 @@ const Transactions = () => {
     }
   }
 
-  const [categories, setCategories] = useState([]);
-
   const getCategories = async () => {
     try {
       const response = await api.get('/api/v1/transactions/categories');
@@ -30,22 +47,6 @@ const Transactions = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    getTransactions();
-    getCategories();
-  }, [])
-
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [newTransaction, setNewTransaction] = useState({
-    date: new Date().toISOString().slice(0, 10),
-    description: '',
-    amount: '',
-    categoryId: '',
-  });
-
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   const openModal = () => {
     setModalOpen(true);
@@ -85,45 +86,53 @@ const Transactions = () => {
   };
 
   const handleDateFilter = () => {
-    if (dateRange.start && dateRange.end) {
-      const filtered = transactions.filter(transaction => {
-        const transactionDate = new Date(transaction.date);
-        const startDate = new Date(dateRange.start);
-        const endDate = new Date(dateRange.end);
-        return transactionDate >= startDate && transactionDate <= endDate;
-      });
-      setFilteredTransactions(filtered);
-    } else {
-      // If no date range is selected, show all transactions
-      setFilteredTransactions(transactions);
-    }
+    // if (dateRange.start && dateRange.end) {
+    //   const filtered = transactions.filter(transaction => {
+    //     const transactionDate = new Date(transaction.date);
+    //     const startDate = new Date(dateRange.start);
+    //     const endDate = new Date(dateRange.end);
+    //     return transactionDate >= startDate && transactionDate <= endDate;
+    //   });
+    //   setFilteredTransactions(filtered);
+    // } else {
+    //   // If no date range is selected, show all transactions
+    //   setFilteredTransactions(transactions);
+    // }
+  }
+  
+  const handleSearch = (query) => {
+    setSearchQuery(query);
   }
 
   return (
     <div className='transactions-container'>
       <h1>Transactions</h1>
       <div className='transaction-heading'>
-        <button onClick={openModal} className="new-button">
-          <span className="plus-sign">+</span>
-          New
-        </button>
+        <div className='transactions-filters'>
+          <TransactionSearchBar handleSearch={handleSearch} />
 
-        <div>
-          <label htmlFor="start-date">Start Date:</label>
-          <input
-            type="date"
-            id="start-date"
-            value={dateRange.start}
-            onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-          />
-          <label htmlFor="end-date">End Date:</label>
-          <input
-            type="date"
-            id="end-date"
-            value={dateRange.end}
-            onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-          />
-          <button onClick={handleDateFilter}>Filter</button>
+          <button onClick={openModal} className="new-button">
+            <span className="plus-sign">+</span>
+            New
+          </button>
+
+          <div>
+            <label htmlFor="start-date">Start Date:</label>
+            <input
+              type="date"
+              id="start-date"
+              value={dateRange.start}
+              onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
+            />
+            <label htmlFor="end-date">End Date:</label>
+            <input
+              type="date"
+              id="end-date"
+              value={dateRange.end}
+              onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
+            />
+            <button onClick={handleDateFilter}>Filter</button>
+          </div>
         </div>
 
         <h3 style={{ color: '#3F9543' }}>+$1000</h3>
@@ -212,7 +221,7 @@ const Transactions = () => {
           </tr>
         </thead>
         <tbody>
-          {transactions.map((transaction, index) => (
+          {filteredTransactions.map((transaction, index) => (
             <tr key={index}>
               <td className="table-check">
                 <input type="checkbox" />
