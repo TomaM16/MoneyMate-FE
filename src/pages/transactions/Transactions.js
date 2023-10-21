@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TransactionSearchBar from '../../components/transaction/searchBar/TransactionSearchBar';
 import DateFilter from '../../components/transaction/dateFilter/DateFilter';
 import CategoryFilter from '../../components/transaction/categoryFilter/CategoryFilter';
+import TypeFilter from '../../components/transaction/typeFilter/TypeFilter';
 import api from '../../api/axiosConfig';
 import "./Transactions.css";
 
@@ -23,6 +24,7 @@ const Transactions = () => {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedType, setSelectedType] = useState('all');
 
 
   const filteredTransactions = transactions.filter((transaction) => {
@@ -34,6 +36,8 @@ const Transactions = () => {
       transaction.description.toLowerCase().includes(searchQuery.toLowerCase());
     
     const isCategoryMatching = !selectedCategory || transaction.category.id === selectedCategory;
+
+    // TODO: Filter by type
   
     return isDateInRange && isDescriptionMatching && isCategoryMatching;
   });
@@ -111,6 +115,10 @@ const Transactions = () => {
     setSearchQuery(query);
   }
 
+  const handleTypeFilter = (type) => {
+    setSelectedType(type);
+  };
+
   return (
     <div className='transactions-container'>
       <h1>Transactions</h1>
@@ -122,6 +130,8 @@ const Transactions = () => {
             <span className="plus-sign">+</span>
             New
           </button>
+
+          <TypeFilter handleTypeFilter={handleTypeFilter} selectedType={selectedType} />
 
           <DateFilter handleDateFilter={handleDateFilter} />
 
