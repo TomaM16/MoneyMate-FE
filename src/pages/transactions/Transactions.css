@@ -130,10 +130,6 @@ table.transactions-table {
     font-family: 'Arial', sans-serif;
 }
   
-/* .add-transaction-form-container label {
-    font-family: 'Helvetica', Arial, sans-serif;
-} */
-  
 .add-transaction-form-container input[type="submit"] {
     background-color: #4CAF50;
     color: #fff;
@@ -163,4 +159,10 @@ table.transactions-table {
 .plus-sign {
     font-size: 1.3em;
     margin-right: 5px;
+}
+
+.transactions-filters {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
