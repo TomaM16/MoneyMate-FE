@@ -102,7 +102,7 @@ const Home = () => {
       {isModalOpen && <div id="overlay" onClick={closeModal} />}
 
       <section>
-        <table cellspacing="0" cellpadding="0" className='categories-table'>
+        <table cellSpacing="0" cellPadding="0" className='categories-table'>
           <thead>
             <tr>
               <th>Categories</th>

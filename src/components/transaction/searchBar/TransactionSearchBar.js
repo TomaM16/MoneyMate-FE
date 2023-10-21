@@ -3,7 +3,7 @@ import "./TransactionSearchBar.css";
 
 const TransactionSearchBar = ({ handleSearch }) => {
   return (
-    <div class="search-box">
+    <div className="search-box">
         <form name="search">
             <input
                 type="text"
