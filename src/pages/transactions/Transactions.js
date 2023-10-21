@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import TransactionSearchBar from '../../components/transaction/TransactionSearchBar';
+import TransactionSearchBar from '../../components/transaction/searchBar/TransactionSearchBar';
+import DateFilter from '../../components/transaction/dateFilter/DateFilter';
+import CategoryFilter from '../../components/transaction/categoryFilter/CategoryFilter';
 import api from '../../api/axiosConfig';
 import "./Transactions.css";
 
@@ -20,9 +22,25 @@ const Transactions = () => {
     categoryId: '',
   });
   const [searchQuery, setSearchQuery] = useState('');
-  const filteredTransactions = transactions.filter((transaction) =>
-    transaction.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+
+  const filteredTransactions = transactions.filter((transaction) => {
+    const isDateInRange =
+      (!dateRange.start || new Date(transaction.date) >= new Date(dateRange.start)) &&
+      (!dateRange.end || new Date(transaction.date) <= new Date(dateRange.end));
+  
+    const isDescriptionMatching =
+      transaction.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const isCategoryMatching = !selectedCategory || transaction.category.id === selectedCategory;
+  
+    return isDateInRange && isDescriptionMatching && isCategoryMatching;
+  });
+  
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategory(parseInt(categoryId, 10));
+  };
 
   useEffect(() => {
     getTransactions();
@@ -85,19 +103,8 @@ const Transactions = () => {
     closeModal();
   };
 
-  const handleDateFilter = () => {
-    // if (dateRange.start && dateRange.end) {
-    //   const filtered = transactions.filter(transaction => {
-    //     const transactionDate = new Date(transaction.date);
-    //     const startDate = new Date(dateRange.start);
-    //     const endDate = new Date(dateRange.end);
-    //     return transactionDate >= startDate && transactionDate <= endDate;
-    //   });
-    //   setFilteredTransactions(filtered);
-    // } else {
-    //   // If no date range is selected, show all transactions
-    //   setFilteredTransactions(transactions);
-    // }
+  const handleDateFilter = (startDate, endDate) => {
+    setDateRange({ start: startDate, end: endDate });
   }
   
   const handleSearch = (query) => {
@@ -116,23 +123,9 @@ const Transactions = () => {
             New
           </button>
 
-          <div>
-            <label htmlFor="start-date">Start Date:</label>
-            <input
-              type="date"
-              id="start-date"
-              value={dateRange.start}
-              onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-            />
-            <label htmlFor="end-date">End Date:</label>
-            <input
-              type="date"
-              id="end-date"
-              value={dateRange.end}
-              onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-            />
-            <button onClick={handleDateFilter}>Filter</button>
-          </div>
+          <DateFilter handleDateFilter={handleDateFilter} />
+
+          <CategoryFilter handleCategoryFilter={handleCategoryFilter} categories={categories} selectedCategory={selectedCategory} />
         </div>
 
         <h3 style={{ color: '#3F9543' }}>+$1000</h3>
@@ -208,7 +201,7 @@ const Transactions = () => {
       )}
       {isModalOpen && <div id="overlay" onClick={closeModal} />}
 
-      <table cellspacing="0" cellpadding="0" className='transactions-table'>
+      <table cellSpacing="0" cellPadding="0" className='transactions-table'>
         <thead>
           <tr>
             <th>
