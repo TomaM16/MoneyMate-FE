@@ -5,6 +5,10 @@ import CategoryFilter from '../../components/transaction/categoryFilter/Category
 import TypeFilter from '../../components/transaction/typeFilter/TypeFilter';
 import api from '../../api/axiosConfig';
 import "./Transactions.css";
+import Toggle from 'react-toggle';
+import "react-toggle/style.css";
+import IncomeIcon from '../../components/transaction/Icons/IncomeIcon';
+import ExpenseIcon from '../../components/transaction/Icons/ExpenseIcon';
 
 function formatDate(dateString) {
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -16,12 +20,14 @@ const Transactions = () => {
   const [categories, setCategories] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
-  const [newTransaction, setNewTransaction] = useState({
+  const defaultTransactionState = {
     date: new Date().toISOString().slice(0, 10),
     description: '',
     amount: '',
+    type: 'INCOME',
     categoryId: '',
-  });
+  }
+  const [newTransaction, setNewTransaction] = useState(defaultTransactionState);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedType, setSelectedType] = useState('all');
@@ -37,9 +43,9 @@ const Transactions = () => {
     
     const isCategoryMatching = !selectedCategory || transaction.category.id === selectedCategory;
 
-    // TODO: Filter by type
+    const isTypeMatching = !selectedType || selectedType === 'all' || transaction.type === selectedType;
   
-    return isDateInRange && isDescriptionMatching && isCategoryMatching;
+    return isDateInRange && isDescriptionMatching && isCategoryMatching && isTypeMatching;
   });
   
   const handleCategoryFilter = (categoryId) => {
@@ -86,6 +92,16 @@ const Transactions = () => {
     });
   };
 
+  const handleToggleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.checked ? 'INCOME' : 'EXPENSE';
+    
+    setNewTransaction({
+      ...newTransaction,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -97,23 +113,17 @@ const Transactions = () => {
         console.log(error);
     }
 
-    setNewTransaction({
-      date: '',
-      description: '',
-      amount: '',
-      categoryId: '',
-    });
-
+    setNewTransaction(defaultTransactionState);
     closeModal();
   };
 
   const handleDateFilter = (startDate, endDate) => {
     setDateRange({ start: startDate, end: endDate });
-  }
+  };
   
   const handleSearch = (query) => {
     setSearchQuery(query);
-  }
+  };
 
   const handleTypeFilter = (type) => {
     setSelectedType(type);
@@ -192,6 +202,20 @@ const Transactions = () => {
                 </div>
 
                 <div className="form-group">
+                  <label htmlFor="description-input">Type:</label>
+                  <Toggle
+                    className='modal-type-toggle'
+                    defaultChecked={newTransaction.type === 'INCOME'}
+                    icons={{
+                      checked: <IncomeIcon />,
+                      unchecked: <ExpenseIcon />,
+                    }}
+                    name='type'
+                    onChange={handleToggleChange}
+                  />
+                </div>
+
+                <div className="form-group">
                   <label htmlFor="amount-input">Amount:</label>
                   <input
                     type="number"
@@ -202,7 +226,6 @@ const Transactions = () => {
                     required
                   />
                 </div>
-
 
               <input type="submit" value="Add" />
             </form>
@@ -232,7 +255,9 @@ const Transactions = () => {
               <td>{formatDate(transaction.date)}</td>
               <td>{transaction.category.name}</td>
               <td>{transaction.description}</td>
-              <td>{transaction.amount}</td>
+              <td className={transaction.type === 'INCOME' ? 'income-amount' : 'expense-amount'}>
+                {transaction.type === 'EXPENSE' && '-'}{transaction.amount}
+              </td>
             </tr>
           ))}
         </tbody>

@@ -9,10 +9,9 @@ const TypeFilter = ({ handleTypeFilter, selectedType }) => {
           type='radio'
           name='tss'
           id='left'
-          value='income'
           v-model='filter'
-          checked={selectedType === 'income'}
-          onChange={() => handleTypeFilter('income')}
+          checked={selectedType === 'INCOME'}
+          onChange={() => handleTypeFilter('INCOME')}
         />
         <label for='left'>
           <span>
@@ -24,7 +23,6 @@ const TypeFilter = ({ handleTypeFilter, selectedType }) => {
           type='radio'
           name='tss'
           id='center'
-          value='all'
           v-model='filter' 
           checked={selectedType === 'all'}
           onChange={() => handleTypeFilter('all')}
@@ -33,16 +31,15 @@ const TypeFilter = ({ handleTypeFilter, selectedType }) => {
           <span>
             <img src='icons/arrowUpDownIcon.svg' alt='All' />
           </span>
-        </label>  
+        </label>
         
         <input
           type='radio'
           name='tss'
           id='right'
-          value='expense'
           v-model='filter'
-          checked={selectedType === 'expense'}
-          onChange={() => handleTypeFilter('expense')}
+          checked={selectedType === 'EXPENSE'}
+          onChange={() => handleTypeFilter('EXPENSE')}
         />
         <label for='right'>
           <span>
