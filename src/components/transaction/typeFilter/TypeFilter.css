@@ -1,0 +1,42 @@
+.three-state-switch {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    display: flex;
+    background: #bdbdbd;
+    border-radius: 25px;
+    color: #0F1419;
+}
+
+.three-state-switch input[type=radio] {
+    display: none;
+}
+
+.three-state-switch input[type=radio]:checked+label span:before {
+    display: inline-block;
+}
+
+.three-state-switch label {
+    position: relative;
+    cursor: pointer;
+    padding: 6px 6px;
+}
+
+.three-state-switch label span:before {
+    content: "";
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.three-state-switch label img {
+    width: 20px;
+    height: 20px;
+}

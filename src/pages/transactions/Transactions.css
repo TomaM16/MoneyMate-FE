@@ -27,7 +27,7 @@ table.transactions-table {
     padding: 8px;
     text-align: left;
 }
-  
+
 .transactions-table th {
     color: #0F1419;
     font-size: 16px;
@@ -61,7 +61,7 @@ table.transactions-table {
 .transactions-table tbody {
     background-color: white;
 }
-  
+
 .modal {
     position: fixed;
     top: 50%;
@@ -74,21 +74,21 @@ table.transactions-table {
     width: 500px;
     max-width: 80%;
 }
-  
+
 .modal-header {
     padding: 10px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-  
+
 .modal-header .title {
     font-size: 1.25rem;
     font-weight: 500;
     flex: 1;
     text-align: center;
 }
-  
+
 .modal-header .close-button {
     cursor: pointer;
     border: none;
@@ -97,7 +97,7 @@ table.transactions-table {
     font-size: 1.25rem;
     font-weight: bold;
 }
-  
+
 #overlay {
     position: fixed;
     transition: 200ms ease-in-out;
@@ -107,18 +107,18 @@ table.transactions-table {
     bottom: 0;
     background-color: rgba(0, 0, 0, .5);
 }
-  
+
 .add-transaction-form-container {
     padding: 20px;
 }
-  
+
 .add-transaction-form-container label,
 .add-transaction-form-container select,
 .add-transaction-form-container input {
     display: block;
     margin-bottom: 10px;
 }
-  
+
 .add-transaction-form-container input[type="text"],
 .add-transaction-form-container input[type="number"],
 .add-transaction-form-container select,
@@ -129,7 +129,7 @@ table.transactions-table {
     border-radius: 10px;
     font-family: 'Arial', sans-serif;
 }
-  
+
 .add-transaction-form-container input[type="submit"] {
     background-color: #4CAF50;
     color: #fff;
@@ -155,7 +155,7 @@ table.transactions-table {
     align-items: center;
     gap: 3px;
 }
-  
+
 .plus-sign {
     font-size: 1.3em;
     margin-right: 5px;
@@ -165,4 +165,28 @@ table.transactions-table {
     display: flex;
     align-items: center;
     gap: 20px;
+}
+
+.modal-type-toggle .react-toggle-track {
+    background-color: #FF9985;
+}
+
+.modal-type-toggle.react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track {
+    background-color: #FF9985;
+}
+
+.modal-type-toggle.react-toggle--checked .react-toggle-track {
+    background-color: #4CAF50;
+}
+
+.modal-type-toggle.react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
+    background-color: #4CAF50;
+}
+
+td.income-amount {
+    color: #4CAF50;
+}
+
+td.expense-amount {
+    color: #FF9985;
 }
