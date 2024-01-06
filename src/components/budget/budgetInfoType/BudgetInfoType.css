@@ -1,0 +1,17 @@
+.budget-info-type-container {
+    padding: 13px 15px 13px 8px;
+    border-radius: 12px;
+}
+
+.name {
+    color: #4D4D4D;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.amount {
+    color: #333;
+    font-size: 22px;
+    font-weight: 500;
+}

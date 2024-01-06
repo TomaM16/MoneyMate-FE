@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/axiosConfig';
 import './Home.css';
+import CategoryMultiSelect from '../../components/budget/categoryMultiSelect/CategoryMultiSelect';
+import BudgetInfo from '../../components/budget/budgetInfo/BudgetInfo';
+import CategoriesTable from '../../components/categories/categoriesTable/CategoriesTable';
+import RecentTransactions from '../../components/recentTransactions/RecentTransactions';
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  let navigate = useNavigate();
+
   const [categories, setCategories] = useState([]);
+  const [recentTransactions, setRecentTransactions] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState({
     name: '',
     description: '',
   });
+
+  const redirectToTransactions = () =>{
+    navigate('/transactions');
+  }
 
   const openModal = () => {
     setModalOpen(true);
@@ -30,7 +42,7 @@ const Home = () => {
     e.preventDefault();
 
     try {
-      await api.post('/api/v1/transactions/categories', newCategory);
+      await api.post('/api/v1/categories', newCategory);
       getCategories();
     } catch (error) {
       console.log(error);
@@ -44,12 +56,22 @@ const Home = () => {
 
   useEffect(() => {
     getCategories();
+    getRecentTransactions()
   }, []);
 
   const getCategories = async () => {
     try {
-      const response = await api.get('/api/v1/transactions/categories');
+      const response = await api.get('/api/v1/categories');
       setCategories(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRecentTransactions = async () => {
+    try {
+      const response = await api.get('/api/v1/transactions/recent');
+      setRecentTransactions(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -58,6 +80,27 @@ const Home = () => {
   return (
     <div className='dashboard-container'>
       <h1>Dashboard</h1>
+
+      {/* <CategoryMultiSelect categories={categories} /> */}
+
+      <div className="budget-categories">
+          {recentTransactions.length > 0 ? (
+            <div className="budget-recent-transactions-container">
+              <BudgetInfo />
+
+              <RecentTransactions transactions={recentTransactions}/>
+            </div>
+          ) : (
+            <div>
+              <h5 className='no-transactions-message'>No transactions yet. Start tracking your transactions now!</h5>
+              <button className='transactions-redirect-button' onClick={(redirectToTransactions)}>
+                Go to Transactions
+              </button>
+            </div>
+          )}
+
+        <CategoriesTable categories={categories} openModal={openModal} />
+      </div>
 
       {isModalOpen && (
         <div className="modal">
@@ -90,7 +133,6 @@ const Home = () => {
                   name="description"
                   value={newCategory.description}
                   onChange={handleCategoryChange}
-                  required
                 />
               </div>
 
@@ -100,32 +142,6 @@ const Home = () => {
         </div>
       )}
       {isModalOpen && <div id="overlay" onClick={closeModal} />}
-
-      <section>
-        <table cellSpacing="0" cellPadding="0" className='categories-table'>
-          <thead>
-            <tr>
-              <th>Categories</th>
-              <th>
-                <button onClick={openModal} className="new-category-button">
-                  <span className="category-plus-sign">+</span>
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((category, index) => (
-              <tr key={index}>
-                <td>
-                  {category.name} <br />
-                  {category.description}
-                </td>
-                <td></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
     </div>
   );
 };

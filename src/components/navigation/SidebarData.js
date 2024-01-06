@@ -10,7 +10,7 @@ export const SidebarData = [
     icon: "icons/transactionsIcon.svg"
   },
   {
-    title: "Reports",
+    title: "Analytics",
     path: "/reports",
     icon: "icons/reportsIcon.svg"
   }

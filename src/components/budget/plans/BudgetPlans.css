@@ -1,0 +1,38 @@
+.budget-plans-table th:first-child,
+.budget-plans-table td:first-child {
+    text-align: left;
+}
+
+th .budget-plans-table-categories {
+    min-width: 55%;
+}
+
+.budget-plans-table th:last-child,
+.budget-plans-table td:last-child {
+    text-align: right;
+}
+
+.budget-plans-table-categories-content {
+    display: flex;
+    justify-content: center;
+}
+
+.budget-plans-table-categories-content-container {
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid #B0B0B0;
+    
+}
+
+.budget-plans-table-categories-content-container hr {
+    height: 1px;
+    background-color: #B0B0B0;
+}
+
+.money-green {
+    color: #4CAF50;
+}
+
+.money-red {
+    color: #FF9985;
+}
