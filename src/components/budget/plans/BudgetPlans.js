@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import api from '../../../api/axiosConfig';
 import './BudgetPlans.css'
+import BudgetService from '../../../services/budget/budget.service';
 
 const BudgetPlans = () => {
     const [budgetPlans, setBudgetPlans] = useState([]);
@@ -11,10 +12,10 @@ const BudgetPlans = () => {
     
     const getBudgetPlans = async () => {
         try {
-            const response = await api.get('/api/v1/budget/plans');
-            setBudgetPlans(response.data);
+            const budgetPlansData = await BudgetService.getBudgetPlans();
+            setBudgetPlans(budgetPlansData);
         } catch (error) {
-            console.log(error);
+            console.log("Error fetching budget plans: " + error);
         }
     };
 

@@ -6,8 +6,8 @@ const HalfCircleProgressBar = ({percentUsed}) => {
     return (
         <div role="progressbar" aria-valuenow={percentUsed} style={{ '--value': percentUsed }}>
             <div className="progressbar-text">
-                <span class="used">used</span>
-                <span class="percentage">{percentUsed}%</span>
+                <span className="used">used</span>
+                <span className="percentage">{percentUsed}%</span>
             </div>
         </div>
     )

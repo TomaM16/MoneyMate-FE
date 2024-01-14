@@ -4,6 +4,7 @@ import './BudgetInfo.css'
 import BudgetInfoType from '../budgetInfoType/BudgetInfoType'
 import '../budgetInfoType/BudgetInfoType.css'
 import HalfCircleProgressBar from '../../progressBar/halfCircle/HalfCircleProgressBar'
+import BudgetService from '../../../services/budget/budget.service';
 
 const BudgetInfo = () => {
     const [budget, setBudget] = useState([]);
@@ -14,11 +15,11 @@ const BudgetInfo = () => {
 
     const getBudget = async () => {
         try {
-            const response = await api.get('/api/v1/budget');
-            console.log(response.data);
-            setBudget(response.data);
+            const budgetData = await BudgetService.getBudget();
+            console.log(budgetData);
+            setBudget(budgetData);
         } catch (error) {
-            console.log(error);
+            console.log("Error fetching budget: " + error);
         }
     };
 

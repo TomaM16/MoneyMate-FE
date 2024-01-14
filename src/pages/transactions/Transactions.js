@@ -3,13 +3,14 @@ import TransactionSearchBar from '../../components/transaction/searchBar/Transac
 import DateFilter from '../../components/transaction/dateFilter/DateFilter';
 import CategoryFilter from '../../components/transaction/categoryFilter/CategoryFilter';
 import TypeFilter from '../../components/transaction/typeFilter/TypeFilter';
-import api from '../../api/axiosConfig';
 import "./Transactions.css";
 import Toggle from 'react-toggle';
 import "react-toggle/style.css";
 import IncomeIcon from '../../components/transaction/Icons/IncomeIcon';
 import ExpenseIcon from '../../components/transaction/Icons/ExpenseIcon';
 import { formatDate, formatTime } from '../../utils/date/DateUtils';
+import CategoriesService from '../../services/categories/categories.service';
+import TransactionService from '../../services/transactions/transactions.service';
 
 
 const Transactions = () => {
@@ -96,20 +97,19 @@ const Transactions = () => {
 
   const getTransactions = async () => {
     try {
-      const response = await api.get('/api/v1/transactions');
-      console.log(response.data);
-      setTransactions(response.data);
+      const transactionsData = await TransactionService.getTransactions();
+      setTransactions(transactionsData);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching transactions:", error);
     }
   }
 
   const getCategories = async () => {
     try {
-      const response = await api.get('/api/v1/categories');
-      setCategories(response.data);
+      const categoriesData = await CategoriesService.getCategories();
+      setCategories(categoriesData);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -143,11 +143,11 @@ const Transactions = () => {
     e.preventDefault();
 
     try {
-      await api.post('/api/v1/transactions', newTransaction);
+      await TransactionService.createTransaction(newTransaction);
       console.log(newTransaction);
       getTransactions();
     } catch (error) {
-      console.log(error);
+      console.error("Error creating transaction:", error);
     }
 
     setNewTransaction(defaultTransactionState);
@@ -305,7 +305,7 @@ const Transactions = () => {
               {filteredTransactions.map((transaction, index) => (
                 <tr key={index}>
                   <td className='category-cell'>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6yIf_k_mAR9v9rebEAu3Yf3XDmOsN6_l3s4056Ka0uGMLE_XVC26Lpk_OTIL41oYWXnw&usqp=CAU" className="category-image" />
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6yIf_k_mAR9v9rebEAu3Yf3XDmOsN6_l3s4056Ka0uGMLE_XVC26Lpk_OTIL41oYWXnw&usqp=CAU" className="category-image" alt='Category'/>
                     <h5 className='black'>{transaction.category.name}</h5>
                   </td>
                   <td className='left-align gray'>{transaction.description}</td>

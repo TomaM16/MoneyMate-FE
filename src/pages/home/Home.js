@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../api/axiosConfig';
 import './Home.css';
 import CategoryMultiSelect from '../../components/budget/categoryMultiSelect/CategoryMultiSelect';
 import BudgetInfo from '../../components/budget/budgetInfo/BudgetInfo';
 import CategoriesTable from '../../components/categories/categoriesTable/CategoriesTable';
 import RecentTransactions from '../../components/recentTransactions/RecentTransactions';
 import { useNavigate } from "react-router-dom";
+import CategoriesService from '../../services/categories/categories.service';
+import TransactionService from '../../services/transactions/transactions.service';
 
 const Home = () => {
   let navigate = useNavigate();
@@ -18,7 +19,7 @@ const Home = () => {
     description: '',
   });
 
-  const redirectToTransactions = () =>{
+  const redirectToTransactions = () => {
     navigate('/transactions');
   }
 
@@ -42,10 +43,10 @@ const Home = () => {
     e.preventDefault();
 
     try {
-      await api.post('/api/v1/categories', newCategory);
+      await CategoriesService.createCategory(newCategory);
       getCategories();
     } catch (error) {
-      console.log(error);
+      console.error("Error creating category:", error);
     }
 
     setNewCategory({
@@ -61,19 +62,20 @@ const Home = () => {
 
   const getCategories = async () => {
     try {
-      const response = await api.get('/api/v1/categories');
-      setCategories(response.data);
+      const categoriesData = await CategoriesService.getCategories();
+      setCategories(categoriesData);
+      console.log(categoriesData);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching categories:", error);
     }
   };
 
   const getRecentTransactions = async () => {
     try {
-      const response = await api.get('/api/v1/transactions/recent');
-      setRecentTransactions(response.data);
+      const recentTransactionsData = await TransactionService.getRecentTransactions();
+      setRecentTransactions(recentTransactionsData);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching recent transactions:", error);
     }
   };
 
@@ -84,20 +86,20 @@ const Home = () => {
       {/* <CategoryMultiSelect categories={categories} /> */}
 
       <div className="budget-categories">
-          {recentTransactions.length > 0 ? (
-            <div className="budget-recent-transactions-container">
-              <BudgetInfo />
+        {recentTransactions.length > 0 ? (
+          <div className="budget-recent-transactions-container">
+            <BudgetInfo />
 
-              <RecentTransactions transactions={recentTransactions}/>
-            </div>
-          ) : (
-            <div>
-              <h5 className='no-transactions-message'>No transactions yet. Start tracking your transactions now!</h5>
-              <button className='transactions-redirect-button' onClick={(redirectToTransactions)}>
-                Go to Transactions
-              </button>
-            </div>
-          )}
+            <RecentTransactions transactions={recentTransactions} />
+          </div>
+        ) : (
+          <div>
+            <h5 className='no-transactions-message'>No transactions yet. Start tracking your transactions now!</h5>
+            <button className='transactions-redirect-button' onClick={(redirectToTransactions)}>
+              Go to Transactions
+            </button>
+          </div>
+        )}
 
         <CategoriesTable categories={categories} openModal={openModal} />
       </div>
