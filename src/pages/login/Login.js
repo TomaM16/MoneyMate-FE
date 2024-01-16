@@ -6,100 +6,98 @@ import { useNavigate } from 'react-router-dom'
 const Login = () => {
   const navigate = useNavigate()
 
+  const [errorMessages, setErrorMessages] = useState({})
+  const [authError, setAuthError] = useState(null)
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const [submitted, setSubmitted] = useState(false)
-  const [error, setError] = useState(false)
-
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
-    setSubmitted(false)
   }
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value)
-    setSubmitted(false)
+  }
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const validateForm = () => {
+    const errors = {}
+
+    if (email === '') {
+      errors.email = 'Please enter your email address'
+    } else if (!validateEmail(email)) {
+      errors.email = 'Please enter a valid email address'
+    }
+
+    if (password === '') {
+      errors.password = 'Please enter a password'
+    }
+
+    setErrorMessages(errors)
+
+    return Object.keys(errors).length === 0
   }
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault()
 
-    if (email === '' || password === '') {
-      setError(true)
-    } else {
+    if (validateForm()) {
       try {
-        const loginData = await AuthService.login(email, password)
-        console.log('Login data: ', loginData)
+        await AuthService.login(email, password)
         navigate('/home')
         window.location.reload()
       } catch (error) {
         console.error('Error logging in:', error)
+        setAuthError(
+          'Error logging in. Please check your credentials and try again.',
+        )
       }
-
-      setSubmitted(true)
-      setError(false)
     }
   }
 
-  // Showing success message
-  const successMessage = () => {
-    return (
-      <div
-        className='success'
-        style={{
-          display: submitted ? '' : 'none',
-        }}
-      >
-        <h1>User successfully logged!!</h1>
-      </div>
-    )
-  }
-
-  const errorMessage = () => {
-    return (
-      <div
-        className='error'
-        style={{
-          display: error ? '' : 'none',
-        }}
-      >
-        <h1>Please enter all the fields</h1>
-      </div>
-    )
-  }
-
   return (
-    <div className='login-container'>
+    <div data-testid='login-container' className='login-container'>
       <div>
         <h1 className='login-header'>Login</h1>
       </div>
 
-      <div className='messages'>
-        {errorMessage()}
-        {successMessage()}
-      </div>
-
       <form className='login-form-container'>
-        <label htmlFor='description-input'>Email:</label>
         <input
+          placeholder='Email'
+          data-testid='email-input'
           type='text'
-          id='description-input'
           value={email}
           onChange={handleEmailChange}
           required
         />
+        {errorMessages.email && (
+          <p data-testid="login-error-email" className='error-message'>{errorMessages.email}</p>
+        )}
 
-        <label htmlFor='password-input'>Password:</label>
         <input
+          placeholder='Password'
+          data-testid='password-input'
           type='password'
-		  id='password-input'
-          value={email}
+          value={password}
           onChange={handlePasswordChange}
           required
         />
+        {errorMessages.password && (
+          <p data-testid="login-error-password" className='error-message'>{errorMessages.password}</p>
+        )}
 
-        <button onClick={handleLoginSubmit} className='login-submit-button' type='submit'>
+        {authError && <p className='error-message'>{authError}</p>}
+        <button
+          data-testid='login-submit'
+          onClick={handleLoginSubmit}
+          className='login-submit-button'
+          type='submit'
+        >
           Login
         </button>
       </form>

@@ -14,29 +14,6 @@
   gap: 3px;
 }
 
-.messages {
-  display: flex;
-  justify-content: center;
-}
-
-.error {
-  display: block;
-  background-color: red;
-  color: white;
-  width: fit-content;
-  height: 50px;
-  padding: 5px;
-}
-
-.success {
-  display: block;
-  background-color: lightblue;
-  color: black;
-  width: fit-content;
-  height: 50px;
-  padding: 5px;
-}
-
 .register-form-container input {
   width: 100%;
   padding: 8px;
@@ -49,10 +26,9 @@
   padding: 20px;
 }
 
-.register-form-container label,
 .register-form-container input {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .register-container {
@@ -83,4 +59,8 @@
 
 .terms-privacy-container input {
   display: inline;
+}
+
+.error-message {
+  color: red;
 }

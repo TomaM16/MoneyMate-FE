@@ -7,46 +7,86 @@ const CreateAccount = () => {
   const navigate = useNavigate()
 
   const [acceptanceChecked, setAcceptanceChecked] = useState(false)
+  const [errorMessages, setErrorMessages] = useState({})
 
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  const [submitted, setSubmitted] = useState(false)
-  const [error, setError] = useState(false)
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value)
-    setSubmitted(false)
   }
 
   const handleLastNameChange = (e) => {
     setLastName(e.target.value)
-    setSubmitted(false)
   }
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
-    setSubmitted(false)
   }
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value)
-    setSubmitted(false)
+  }
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value)
+  }
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const validatePassword = (password) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/
+    return passwordRegex.test(password)
+  }
+
+  const validateForm = () => {
+    const errors = {}
+
+    if (firstName === '') {
+      errors.firstName = 'Please enter your first name'
+    }
+
+    if (lastName === '') {
+      errors.lastName = 'Please enter your last name'
+    }
+
+    if (email === '') {
+      errors.email = 'Please enter your email address'
+    } else if (!validateEmail(email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+
+    if (password === '') {
+      errors.password = 'Please enter a password'
+    } else if (!validatePassword(password)) {
+      errors.password = 'Password must be at least 8 characters and contain at least one lowercase letter, one uppercase letter, one number, and one special character';
+    }
+
+    if (password !== confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match'
+    }
+
+    if (!acceptanceChecked) {
+      errors.acceptanceChecked =
+        'You must accept the Terms of Service and Privacy Policy'
+    }
+
+    setErrorMessages(errors)
+
+    return Object.keys(errors).length === 0
   }
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault()
-    if (
-      firstName === '' ||
-      lastName === '' ||
-      email === '' ||
-      password === '' ||
-      !acceptanceChecked
-    ) {
-      setError(true)
-    } else {
+
+    if (validateForm()) {
       try {
         const registerData = await AuthService.signUp(
           firstName,
@@ -60,89 +100,83 @@ const CreateAccount = () => {
       } catch (error) {
         console.error('Error logging in:', error)
       }
-
-      setSubmitted(true)
-      setError(false)
     }
   }
 
-  const successMessage = () => {
-    return (
-      <div
-        className='success'
-        style={{
-          display: submitted ? '' : 'none',
-        }}
-      >
-        <h1>User {firstName} successfully registered!!</h1>
-      </div>
-    )
-  }
-
-  const errorMessage = () => {
-    return (
-      <div
-        className='error'
-        style={{
-          display: error ? '' : 'none',
-        }}
-      >
-        <h1>Please enter all the fields</h1>
-      </div>
-    )
-  }
-
   return (
-    <div className='register-container'>
+    <div data-testid='register-container' className='register-container'>
       <div>
         <h1 className='register-header'>Registration</h1>
       </div>
 
-      <div className='messages'>
-        {errorMessage()}
-        {successMessage()}
-      </div>
-
       <form className='register-form-container'>
-        <label htmlFor='firstname-input'>First Name:</label>
         <input
+          data-testid="first-name-input"
+          placeholder='First Name'
           type='text'
           id='firstname-input'
           value={firstName}
           onChange={handleFirstNameChange}
           required
         />
+        {errorMessages.firstName && (
+          <p data-testid="register-error-first-name" className='error-message'>{errorMessages.firstName}</p>
+        )}
 
-        <label htmlFor='lastname-input'>Last Name:</label>
         <input
+          data-testid="last-name-input"
+          placeholder='Last Name'
           type='text'
           id='lastname-input'
           value={lastName}
           onChange={handleLastNameChange}
           required
         />
+        {errorMessages.lastName && (
+          <p data-testid="register-error-last-name" className='error-message'>{errorMessages.lastName}</p>
+        )}
 
-        <label htmlFor='email-input'>Email:</label>
         <input
+          data-testid="email-input"
+          placeholder='Email'
           type='text'
           id='email-input'
           value={email}
           onChange={handleEmailChange}
           required
         />
+        {errorMessages.email && (
+          <p data-testid="register-error-email" className='error-message'>{errorMessages.email}</p>
+        )}
 
-        <label htmlFor='password-input'>Password:</label>
         <input
+          data-testid="password-input"
+          placeholder='Password'
           type='password'
-          id='password-input'
-          value={email}
+          value={password}
           onChange={handlePasswordChange}
           required
         />
+        {errorMessages.password && (
+          <p data-testid="register-error-password" className='error-message'>{errorMessages.password}</p>
+        )}
+
+        <input
+          data-testid="confirm-password-input"
+          placeholder='Confirm Password'
+          type='password'
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
+          required
+        />
+        {errorMessages.confirmPassword && (
+          <p data-testid="register-error-confirm-password" className='error-message'>{errorMessages.confirmPassword}</p>
+        )}
 
         <div className='terms-privacy-container'>
           <label>
             <input
+              data-testid="acceptance-input"
               type='checkbox'
               checked={acceptanceChecked}
               onChange={() => setAcceptanceChecked(!acceptanceChecked)}
@@ -156,9 +190,13 @@ const CreateAccount = () => {
               Privacy Policy
             </a>
           </label>
+          {errorMessages.acceptanceChecked && (
+            <p data-testid="register-error-acceptance" className='error-message'>{errorMessages.acceptanceChecked}</p>
+          )}
         </div>
 
         <button
+          data-testid='submit'
           onClick={handleRegisterSubmit}
           className='register-submit-button'
           type='submit'
