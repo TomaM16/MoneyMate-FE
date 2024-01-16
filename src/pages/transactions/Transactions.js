@@ -3,17 +3,15 @@ import TransactionSearchBar from '../../components/transaction/searchBar/Transac
 import DateFilter from '../../components/transaction/dateFilter/DateFilter';
 import CategoryFilter from '../../components/transaction/categoryFilter/CategoryFilter';
 import TypeFilter from '../../components/transaction/typeFilter/TypeFilter';
-import api from '../../api/axiosConfig';
 import "./Transactions.css";
 import Toggle from 'react-toggle';
 import "react-toggle/style.css";
 import IncomeIcon from '../../components/transaction/Icons/IncomeIcon';
 import ExpenseIcon from '../../components/transaction/Icons/ExpenseIcon';
+import { formatDate, formatTime } from '../../utils/date/DateUtils';
+import CategoriesService from '../../services/categories/categories.service';
+import TransactionService from '../../services/transactions/transactions.service';
 
-function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-}
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
@@ -31,23 +29,63 @@ const Transactions = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedType, setSelectedType] = useState('all');
+  const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
 
 
   const filteredTransactions = transactions.filter((transaction) => {
     const isDateInRange =
       (!dateRange.start || new Date(transaction.date) >= new Date(dateRange.start)) &&
       (!dateRange.end || new Date(transaction.date) <= new Date(dateRange.end));
-  
+
     const isDescriptionMatching =
       transaction.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const isCategoryMatching = !selectedCategory || transaction.category.id === selectedCategory;
 
     const isTypeMatching = !selectedType || selectedType === 'all' || transaction.type === selectedType;
-  
+
     return isDateInRange && isDescriptionMatching && isCategoryMatching && isTypeMatching;
   });
-  
+
+  const mockFilteredTransactions = [
+    {
+      date: new Date().toISOString().slice(0, 10),
+      description: 'Tr 1',
+      amount: '100',
+      type: 'INCOME',
+      category: {
+        name: 'Category 1',
+      },
+    },
+    {
+      date: new Date().toISOString().slice(0, 10),
+      description: 'Tr 1',
+      amount: '100',
+      type: 'INCOME',
+      category: {
+        name: 'Category 1',
+      },
+    },
+    {
+      date: new Date().toISOString().slice(0, 10),
+      description: 'Tr 1',
+      amount: '100',
+      type: 'INCOME',
+      category: {
+        name: 'Category 1',
+      },
+    },
+    {
+      date: new Date().toISOString().slice(0, 10),
+      description: 'Tr 1',
+      amount: '100',
+      type: 'INCOME',
+      category: {
+        name: 'Category 1',
+      },
+    }
+  ]
+
   const handleCategoryFilter = (categoryId) => {
     setSelectedCategory(parseInt(categoryId, 10));
   };
@@ -59,20 +97,19 @@ const Transactions = () => {
 
   const getTransactions = async () => {
     try {
-      const response = await api.get('/api/v1/transactions');
-      console.log(response.data);
-      setTransactions(response.data);
+      const transactionsData = await TransactionService.getTransactions();
+      setTransactions(transactionsData);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching transactions:", error);
     }
   }
 
   const getCategories = async () => {
     try {
-      const response = await api.get('/api/v1/transactions/categories');
-      setCategories(response.data);
+      const categoriesData = await CategoriesService.getCategories();
+      setCategories(categoriesData);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -95,7 +132,7 @@ const Transactions = () => {
   const handleToggleChange = (e) => {
     const name = e.target.name;
     const value = e.target.checked ? 'INCOME' : 'EXPENSE';
-    
+
     setNewTransaction({
       ...newTransaction,
       [name]: value,
@@ -104,13 +141,13 @@ const Transactions = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
-        await api.post('/api/v1/transactions', newTransaction);
-        console.log(newTransaction);
-        getTransactions();
+      await TransactionService.createTransaction(newTransaction);
+      console.log(newTransaction);
+      getTransactions();
     } catch (error) {
-        console.log(error);
+      console.error("Error creating transaction:", error);
     }
 
     setNewTransaction(defaultTransactionState);
@@ -120,13 +157,17 @@ const Transactions = () => {
   const handleDateFilter = (startDate, endDate) => {
     setDateRange({ start: startDate, end: endDate });
   };
-  
+
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
   const handleTypeFilter = (type) => {
     setSelectedType(type);
+  };
+
+  const handleFilterButtonClick = () => {
+    setIsFilterPopupOpen(!isFilterPopupOpen);
   };
 
   return (
@@ -140,6 +181,20 @@ const Transactions = () => {
             <span className="plus-sign">+</span>
             New
           </button>
+
+          {/* <div>
+            <div classname="filter"></div>
+
+            <button onClick={handleFilterButtonClick} className="filter-button">Open Filters</button>
+
+            {isFilterPopupOpen && (
+              <div className="popup">
+                <TypeFilter handleTypeFilter={handleTypeFilter} selectedType={selectedType} />
+                <DateFilter handleDateFilter={handleDateFilter} />
+                <CategoryFilter handleCategoryFilter={handleCategoryFilter} categories={categories} selectedCategory={selectedCategory} />
+              </div>
+            )}
+          </div> */}
 
           <TypeFilter handleTypeFilter={handleTypeFilter} selectedType={selectedType} />
 
@@ -173,59 +228,59 @@ const Transactions = () => {
               />
 
               <div className="form-group">
-                  <label htmlFor="category-select">Category:</label>
-                  <select
-                    id="category-select"
-                    name="categoryId"
-                    value={newTransaction.categoryId}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select a category</option>
+                <label htmlFor="category-select">Category:</label>
+                <select
+                  id="category-select"
+                  name="categoryId"
+                  value={newTransaction.categoryId}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Select a category</option>
 
-                    {categories.map((category, index) => (
-                      <option value={category.id}>{category.name}</option>
-                    ))}
-                  </select>
-                </div>
+                  {categories.map((category, index) => (
+                    <option value={category.id}>{category.name}</option>
+                  ))}
+                </select>
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="description-input">Description:</label>
-                  <input
-                    type="text"
-                    id="description-input"
-                    name="description"
-                    value={newTransaction.description}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
+              <div className="form-group">
+                <label htmlFor="description-input">Description:</label>
+                <input
+                  type="text"
+                  id="description-input"
+                  name="description"
+                  value={newTransaction.description}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="description-input">Type:</label>
-                  <Toggle
-                    className='modal-type-toggle'
-                    defaultChecked={newTransaction.type === 'INCOME'}
-                    icons={{
-                      checked: <IncomeIcon />,
-                      unchecked: <ExpenseIcon />,
-                    }}
-                    name='type'
-                    onChange={handleToggleChange}
-                  />
-                </div>
+              <div className="form-group">
+                <label htmlFor="description-input">Type:</label>
+                <Toggle
+                  className='modal-type-toggle'
+                  defaultChecked={newTransaction.type === 'INCOME'}
+                  icons={{
+                    checked: <IncomeIcon />,
+                    unchecked: <ExpenseIcon />,
+                  }}
+                  name='type'
+                  onChange={handleToggleChange}
+                />
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="amount-input">Amount:</label>
-                  <input
-                    type="number"
-                    id="amount-input"
-                    name="amount"
-                    value={newTransaction.amount}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
+              <div className="form-group">
+                <label htmlFor="amount-input">Amount:</label>
+                <input
+                  type="number"
+                  id="amount-input"
+                  name="amount"
+                  value={newTransaction.amount}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
 
               <input type="submit" value="Add" />
             </form>
@@ -234,35 +289,37 @@ const Transactions = () => {
       )}
       {isModalOpen && <div id="overlay" onClick={closeModal} />}
 
-      <table cellSpacing="0" cellPadding="0" className='transactions-table'>
-        <thead>
-          <tr>
-            <th>
-              <input type="checkbox" />
-            </th>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTransactions.map((transaction, index) => (
-            <tr key={index}>
-              <td className="table-check">
-                <input type="checkbox" />
-              </td>
-              <td>{formatDate(transaction.date)}</td>
-              <td>{transaction.category.name}</td>
-              <td>{transaction.description}</td>
-              <td className={transaction.type === 'INCOME' ? 'income-amount' : 'expense-amount'}>
-                {transaction.type === 'EXPENSE' && '-'}{transaction.amount}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-
-      </table>
+      {filteredTransactions.length > 0 && (
+        <div className="all-transactions-table-container">
+          <table className="recent-transactions-table all-transactions-table">
+            <thead>
+              <tr>
+                <th><span>Category</span></th>
+                <th className='left-align'>Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTransactions.map((transaction, index) => (
+                <tr key={index}>
+                  <td className='category-cell'>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6yIf_k_mAR9v9rebEAu3Yf3XDmOsN6_l3s4056Ka0uGMLE_XVC26Lpk_OTIL41oYWXnw&usqp=CAU" className="category-image" alt='Category'/>
+                    <h5 className='black'>{transaction.category.name}</h5>
+                  </td>
+                  <td className='left-align gray'>{transaction.description}</td>
+                  <td className='right-align gray'>{formatDate(transaction.date)}</td>
+                  <td className='center-align gray'>{formatTime(transaction.date)}</td>
+                  <td className={transaction.type === 'INCOME' ? 'income-amount black' : 'expense-amount black'}>
+                    {transaction.type === 'EXPENSE' && '-'}{transaction.amount}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }

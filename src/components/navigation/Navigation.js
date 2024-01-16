@@ -2,17 +2,18 @@ import React from "react";
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import { SidebarData } from "./SidebarData";
+import './Navigation.css';
 
-const Navigation = () => {
+const Navigation = (onLogoutClicked) => {
     const [isCollapsed, setIsCollapsed] = React.useState(true);
-    
+
     return (
         <Sidebar collapsed={isCollapsed} style={{ height: "100vh" }}>
             <Menu>
                 <MenuItem
                     icon={<img src="icons/menuIcon.svg" alt="Menu" />}
                     onClick={() => {
-                    setIsCollapsed(!isCollapsed);
+                        setIsCollapsed(!isCollapsed);
                     }}
                     style={{ textAlign: "center" }}
                 >
@@ -21,8 +22,8 @@ const Navigation = () => {
                 </MenuItem>
 
                 {SidebarData.map((item) => (
-                    <MenuItem
-                        icon={<img src={item.icon} alt={item.tile} />}
+                    <MenuItem key={item.path}
+                        icon={<img className="navigation-menu-icon" src={item.icon} alt={item.title} />}
                         component={<Link to={item.path} />}
                     >
                         {" "}

@@ -7,7 +7,7 @@ const TransactionSearchBar = ({ handleSearch }) => {
         <form name="search">
             <input
                 type="text"
-                className="input"
+                className="search-input"
                 name="txt"
                 onChange={(e) => handleSearch(e.target.value)}
             />

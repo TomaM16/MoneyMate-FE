@@ -1,0 +1,387 @@
+[data-custom-class='body'],
+[data-custom-class='body'] * {
+    background: transparent !important;
+}
+
+[data-custom-class='title'],
+[data-custom-class='title'] * {
+    font-family: Arial !important;
+    font-size: 26px !important;
+    color: #000000 !important;
+}
+
+[data-custom-class='subtitle'],
+[data-custom-class='subtitle'] * {
+    font-family: Arial !important;
+    color: #595959 !important;
+    font-size: 14px !important;
+}
+
+[data-custom-class='heading_1'],
+[data-custom-class='heading_1'] * {
+    font-family: Arial !important;
+    font-size: 19px !important;
+    color: #000000 !important;
+}
+
+[data-custom-class='heading_2'],
+[data-custom-class='heading_2'] * {
+    font-family: Arial !important;
+    font-size: 17px !important;
+    color: #000000 !important;
+}
+
+[data-custom-class='body_text'],
+[data-custom-class='body_text'] * {
+    color: #595959 !important;
+    font-size: 14px !important;
+    font-family: Arial !important;
+}
+
+[data-custom-class='link'],
+[data-custom-class='link'] * {
+    color: #3030F1 !important;
+    font-size: 14px !important;
+    font-family: Arial !important;
+    word-break: break-word !important;
+}
+
+ul {
+    list-style-type: square;
+}
+
+ul>li>ul {
+    list-style-type: circle;
+}
+
+ul>li>ul>li>ul {
+    list-style-type: square;
+}
+
+ol li {
+    font-family: Arial;
+}
+
+div.c56 {
+    color: #595959;
+    font-size: 14px;
+    font-family: Arial;
+    padding-top: 16px;
+}
+
+a.c55 {
+    color: rgb(48, 48, 241) !important;
+}
+
+span.c54 {
+    color: rgb(89, 89, 89);
+}
+
+span.c53 {
+    color: rgb(89, 89, 89);
+    font-family: Arial;
+    font-size: 15px;
+    line-height: 115%
+}
+
+span.c52 {
+    font-family: Arial;
+    font-size: 19px;
+    line-height: 115%
+}
+
+span.c51 {
+    font-size: 14.6667px;
+}
+
+span.c50 {
+    font-size: 11pt;
+    color: rgb(89, 89, 89);
+    text-transform: uppercase;
+}
+
+span.c49 {
+    font-size: 19px;
+    color: rgb(0, 0, 0);
+}
+
+span.c48 {
+    font-size: 15px;
+    line-height: 16.8667px;
+    color: rgb(0, 0, 0);
+}
+
+span.c47 {
+    font-size: 15px;
+    line-height: 16.8667px;
+    color: rgb(0, 58, 250);
+}
+
+div.c46 {
+    line-height: 1.5;
+    text-align: justify
+}
+
+div.c45 {
+    text-align: justify;
+    line-height: 1;
+}
+
+ul.c44 {
+    font-size: medium;
+    text-align: left;
+}
+
+span.c43 {
+    color: rgb(89, 89, 89);
+    font-size: 14px
+}
+
+div.c42 {
+    line-height: 1
+}
+
+span.c41 {
+    -webkit-text-stroke-width: 0px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(89, 89, 89);
+    font-family: sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-ligatures: normal;
+    font-weight: 400;
+    letter-spacing: normal;
+    line-height: 16.8667px;
+    orphans: 2;
+    text-align: justify;
+    text-decoration-color: initial;
+    text-decoration-style: initial;
+    text-indent: -29.4px;
+    text-transform: none;
+    white-space: normal;
+    widows: 2;
+    word-spacing: 0px
+}
+
+li.c40 {
+    line-height: 1.5;
+    text-align: left;
+}
+
+span.c39 {
+    -webkit-text-stroke-width: 0px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(89, 89, 89);
+    font-family: sans-serif;
+    font-size: 11pt;
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-ligatures: normal;
+    font-weight: 400;
+    letter-spacing: normal;
+    line-height: 16.8667px;
+    orphans: 2;
+    text-align: justify;
+    text-decoration-color: initial;
+    text-decoration-style: initial;
+    text-indent: -29.4px;
+    text-transform: none;
+    white-space: normal;
+    widows: 2;
+    word-spacing: 0px
+}
+
+div.c38 {
+    line-height: 17.25px;
+    text-align: left
+}
+
+div.c37 {
+    line-height: 1;
+    text-align: justify
+}
+
+div.c36 {
+    text-align: justify;
+    line-height: 1.5;
+}
+
+div.c35 {
+    text-align: left;
+    line-height: 1.5;
+}
+
+div.c34 {
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+span.c33 {
+    line-height: 115%;
+    font-family: Arial;
+    color: rgb(89, 89, 89);
+}
+
+span.c32 {
+    font-size: 15px;
+    line-height: 115%;
+    font-family: Arial;
+    color: rgb(89, 89, 89);
+}
+
+div.c31 {
+    line-height: 1.5;
+    margin-left: 20px;
+}
+
+div.c30 {
+    line-height: 115%;
+    text-align: justify
+}
+
+div.c29 {
+    line-height: 115%;
+    text-align: left
+}
+
+div.c28 {
+    line-height: 1;
+    text-align: left
+}
+
+span.c27 {
+    line-height: 24.5333px;
+    font-size: 19px;
+}
+
+div.c26 {
+    line-height: 17.25px;
+}
+
+div.c25 {
+    line-height: 1.1;
+    text-align: left;
+}
+
+div.c24 {
+    line-height: 1.5;
+    text-align: left;
+}
+
+span.c23 {
+    font-size: 11pt;
+    line-height: 16.8667px;
+    color: rgb(89, 89, 89);
+}
+
+span.c22 {
+    color: rgb(89, 89, 89);
+    font-size: 11pt;
+}
+
+span.c21 {
+    line-height: 115%;
+    font-family: Arial;
+    font-size: 19px;
+}
+
+li.c20 {
+    line-height: 1.5;
+}
+
+div.c19 {
+    line-height: 1.5;
+    text-align: center
+}
+
+span.c18 {
+    font-size: 15px;
+}
+
+span.c17 {
+    color: rbg(0, 58, 250);
+    font-size: 15px;
+}
+
+span.c16 {
+    color: rgb(0, 58, 250);
+    font-size: 15px;
+}
+
+span.c15 {
+    color: rgb(89, 89, 89);
+    font-size: 14.6667px;
+}
+
+span.c14 {
+    color: #595959;
+    color: rgb(89, 89, 89);
+    font-family: Arial;
+    font-size: 11.0pt;
+    line-height: 115%;
+}
+
+div.c13 {
+    line-height: 1;
+}
+
+span.c12 {
+    color: rgb(0, 58, 250);
+}
+
+span.c11 {
+    color: rgb(89, 89, 89);
+    font-size: 15px
+}
+
+span.c10 {
+    font-size: 11.0pt;
+    line-height: 115%;
+    font-family: Arial;
+    color: #595959;
+}
+
+span.c9 {
+    font-family: Arial;
+    color: #595959;
+    font-size: 11.0pt;
+    line-height: 115%;
+}
+
+span.c8 {
+    font-size: 11.0pt;
+    line-height: 115%;
+    font-family: Arial;
+    color: #595959;
+}
+
+div.c7 {
+    line-height: 1;
+    text-align: center
+}
+
+div.c6 {
+    line-height: 1.5;
+    text-align: left
+}
+
+div.c5 {
+    text-align: left
+}
+
+div.c4 {
+    line-height: 115%;
+}
+
+div.c3 {
+    line-height: 1.1;
+}
+
+div.c2 {
+    line-height: 1.5;
+}
+
+span.c1 {
+    font-size: 19px;
+}
