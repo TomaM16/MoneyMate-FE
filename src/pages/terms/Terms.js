@@ -59,7 +59,7 @@ const Terms = () => {
             <div class="c5">
                 <div class="MsoNormal c2" data-custom-class="body_text">
                     <span class="c10">We operate the website <span class="c12"><a href="http://www.tomamilkov.com"
-                        target="_blank" data-custom-class="link">http://www.tomamilkov.com</a></span> (the
+                        target="_blank" data-custom-class="link" rel="noreferrer">http://www.tomamilkov.com</a></span> (the
                         '<strong>Site</strong>'), as well as any other related products and
                         services that refer or link to these legal terms (the '<strong>Legal
                             Terms</strong>') (collectively, the '<strong>Services</strong>').</span>
@@ -1378,7 +1378,7 @@ const Terms = () => {
                 <span class="c23">We care about data privacy and security. Please review our
                     Privacy Policy:<strong>&nbsp;<span class="c12"><a
                         href="https://www.termsfeed.com/live/4adee63f-2215-4f8b-95b7-56082f06e429" target="_blank"
-                        data-custom-class="link">https://www.termsfeed.com/live/4adee63f-2215-4f8b-95b7-56082f06e429</a></span></strong>.
+                        data-custom-class="link" rel="noreferrer">https://www.termsfeed.com/live/4adee63f-2215-4f8b-95b7-56082f06e429</a></span></strong>.
                     By using the Services, you agree to be bound by our Privacy Policy, which is
                     incorporated into these Legal Terms. Please be advised the Services are
                     hosted in the Netherlands. If you access the Services from any other region
